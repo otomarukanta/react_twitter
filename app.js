@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var twitter = require('ntwitter');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -56,5 +57,15 @@ app.use(function(err, req, res, next) {
   });
 });
 
+var conf = require('./conf.json');
+console.log(conf);
+
+tw = new twitter(conf);
+
+tw.stream('statuses/filter', {'track':'hello'}, function(stream) {
+  stream.on('data', function (data) {
+    console.log(data);
+  });
+});
 
 module.exports = app;
